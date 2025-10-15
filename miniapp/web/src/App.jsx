@@ -4,7 +4,7 @@ import { Outlet, Link, useLocation } from "react-router-dom";
 import WebApp from "@twa-dev/sdk";
 import axios from "axios";
 
-const API = "https://myola-api.serveo.net";
+const API = "https://my-ola-api.onrender.com";
 
 export default function App() {
   const [status, setStatus] = useState("loading…");

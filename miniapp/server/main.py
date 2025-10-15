@@ -192,7 +192,13 @@ def get_schedule_by_day(day: str):
     if not filtered:
         raise HTTPException(status_code=404, detail="Розклад не знайдено на цей день")
     return {"data": filtered}
-
+# ===== ВРЕМЕННЫЙ ОТЛАДОЧНЫЙ ЭНДПОИНТ =====
+@app.get("/api/super-secret-debug-token-check")
+def get_debug_token():
+    # Этот эндпоинт покажет нам токен, который видит Render
+    # ВНИМАНИЕ: Этот код нужно будет удалить после отладки!
+    return {"token_on_render": BOT_TOKEN}
+# ==========================================
 app.include_router(schedule_router, prefix="/api", tags=["schedule"])
 
 # ===================== DEBUG: список маршрутов =====================
