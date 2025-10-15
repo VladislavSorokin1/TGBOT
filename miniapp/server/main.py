@@ -161,12 +161,12 @@ def ping():
 
 
 @api_router.get("/me")
-def me(user: dict = Depends(get_user)):
+def me(user: dict = Depends(get_user, use_cache=False)):
     return {"user": user}
 
 
 @api_router.get("/profile", response_model=ProfileOut)
-def get_profile(user: dict = Depends(get_user)):
+def get_profile(user: dict = Depends(get_user, use_cache=False)):
     tg_id = user["user"]["id"]
     db = conn()
     student = None
@@ -182,14 +182,14 @@ def get_profile(user: dict = Depends(get_user)):
             db.commit()
     db.close()
     if student:
-        return dict(student)  # <--- ГЛАВНОЕ ИСПРАВЛЕНИЕ ЗДЕСЬ
+        return dict(student)
     raise HTTPException(status_code=404, detail="Student not found")
 
 
 @api_router.post("/profile", response_model=ProfileOut)
-def save_profile(payload: ProfileIn, user: dict = Depends(get_user)):
+def save_profile(payload: ProfileIn, user: dict = Depends(get_user, use_cache=False)):
     tg_id = user["user"]["id"]
-    data = payload.model_dump(by_alias=False)  # Используем .model_dump() вместо .dict()
+    data = payload.model_dump(by_alias=False)
 
     sql = """
         INSERT INTO students (tg_id, first_name, last_name, phone, email, department_name, student_group, course, status, lang)
@@ -212,15 +212,16 @@ def save_profile(payload: ProfileIn, user: dict = Depends(get_user)):
     db.close()
     return updated_student
 
+
 @api_router.get("/schedule", response_model=List[ScheduleItem])
-def get_schedule(user: dict = Depends(get_user)):
+def get_schedule(user: dict = Depends(get_user, use_cache=False)):
     db = conn()
     schedule_data = []
     with db.cursor() as cur:
         cur.execute("SELECT * FROM schedule ORDER BY time")
         schedule_data = cur.fetchall()
     db.close()
-    return [dict(row) for row in schedule_data]  # <--- И ГЛАВНОЕ ИСПРАВЛЕНИЕ ЗДЕСЬ
+    return [dict(row) for row in schedule_data]
 
 
 app.include_router(api_router)
