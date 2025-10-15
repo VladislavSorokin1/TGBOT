@@ -5,6 +5,7 @@ import urllib.parse
 import json
 from contextlib import asynccontextmanager
 from typing import Optional, List
+import traceback
 
 import psycopg2
 from psycopg2.extras import DictCursor
@@ -99,20 +100,25 @@ def get_user(initdata: str = Header(..., alias="X-Telegram-InitData")):
 
 # ===================== Работа с базой данных =====================
 
+
 def conn():
-    """
-    Устанавливает соединение с базой данных PostgreSQL.
-    """
     try:
+        # Создаем подключение к PostgreSQL
         c = psycopg2.connect(
-            host=DB_HOST, port=DB_PORT, user=DB_USER,
-            password=DB_PASS, dbname=DB_NAME,
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASS,
+            dbname=DB_NAME,
             cursor_factory=DictCursor
         )
         return c
     except psycopg2.OperationalError as e:
-        print(f"!!! DATABASE CONNECTION ERROR: {e}")
-        raise HTTPException(status_code=500, detail="DB connection error")
+        # --- РАСШИРЕННОЕ ЛОГИРОВАНИЕ ОШИБКИ ---
+        print("!!! DETAILED DATABASE CONNECTION ERROR !!!")
+        print(traceback.format_exc())
+        print("-----------------------------------------")
+        raise HTTPException(status_code=500, detail=f"DB connection error: {e}")
 
 
 # ===================== Модели данных (Pydantic) =====================
