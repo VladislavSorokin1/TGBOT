@@ -182,7 +182,7 @@ def get_profile(user: dict = Depends(get_user)):
             db.commit()
     db.close()
     if student:
-        return dict(student) # <--- ВОТ ИСПРАВЛЕНИЕ
+        return dict(student)  # <--- ГЛАВНОЕ ИСПРАВЛЕНИЕ ЗДЕСЬ
     raise HTTPException(status_code=404, detail="Student not found")
 
 
@@ -220,7 +220,7 @@ def get_schedule(user: dict = Depends(get_user)):
         cur.execute("SELECT * FROM schedule ORDER BY time")
         schedule_data = cur.fetchall()
     db.close()
-    return [dict(row) for row in schedule_data] # <--- И ВОТ ИСПРАВЛЕНИЕ
+    return [dict(row) for row in schedule_data]  # <--- И ГЛАВНОЕ ИСПРАВЛЕНИЕ ЗДЕСЬ
 
 
 app.include_router(api_router)
