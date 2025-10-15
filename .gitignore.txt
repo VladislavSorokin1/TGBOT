@@ -1,0 +1,24 @@
+# Python / venv
+.venv/
+__pycache__/
+*.pyc
+*.env
+miniapp/server/.env
+
+# Базы данных
+*.sql
+*.db
+miniapp.db
+
+# Node.js / Vite
+miniapp/web/node_modules/
+miniapp/web/dist/
+.npm/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor/OS files
+.idea/
+.vscode/
+*.DS_Store

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body style="background-color: #222; color: #eee; font-family: sans-serif; padding: 1em; word-wrap: break-word;">
+    <h1>Тестовая страница</h1>
+    <p>Проверка данных Telegram WebApp...</p>
+    <hr>
+    <div id="output"></div>
+    <script>
+        const output = document.getElementById('output');
+        try {
+            if (window.Telegram && window.Telegram.WebApp) {
+                const webApp = window.Telegram.WebApp;
+                webApp.ready();
+                output.textContent = 'SDK загружен. \n\ninitData: \n\n' + webApp.initData;
+            } else {
+                output.textContent = 'ОШИБКА: Telegram WebApp SDK не найден!';
+            }
+        } catch (e) {
+            output.textContent = 'Произошла ошибка: ' + e.message;
+        }
+    </script>
+</body>
+</html>
